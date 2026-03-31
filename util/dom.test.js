@@ -48,3 +48,5 @@ it('should output the provided message in the error paragraph', () => {
 
   expect(errorParagraph.textContent).toBe(testErrorMessage);
 });
+
+// Note that for more extensive DOM testing, hapy-dom, or js-dom might be too clunky and require too much manual setup. In that case, a good external library is 'Testing Library'
