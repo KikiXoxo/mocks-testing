@@ -50,3 +50,26 @@ it('should convert the provided data to JSON before sending the request', async 
 
   expect(errorMessage).not.toBe('Not a string');
 });
+
+it('should throw an HttpError in case of non-ok responses', () => {
+  // Inside testFetch, we set ok to true. however for this specific test, we want it to be false. We can do that as so
+
+  testFetch.mockImplementationOnce((url, options) => {
+    return new Promise((resolve, reject) => {
+      const testResponse = {
+        ok: false,
+        json() {
+          return new Promise((resolve, reject) => {
+            resolve(testResponseData);
+          });
+        },
+      };
+      resolve(testResponse);
+    });
+  });
+  // We removed the 'if (typeof options.body....) part too because its not necessary for this test'
+
+  const testData = { key: 'test' };
+
+  return expect(sendDataRequest(testData)).rejects.toBeInstanceOf(HttpError);
+});
